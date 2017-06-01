@@ -1,20 +1,4 @@
 
-
-
-#define dim 18
-
-void sleep_mil(unsigned int ms)
-{
-    #if defined(WIN32)
-      Sleep(ms);
-    #elif defined(__unix__)
-      usleep(1000*ms);
-    #else
-      printf("Unsupported operating system!");
-    #endif
-
-}
-
 void clear_screen ( void )
 {
   DWORD n;                         /* Number of characters written */
