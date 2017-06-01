@@ -1,9 +1,4 @@
 
-void set_color(short Color)
-{
-  HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE); // Funzione che mi permette di cambiare colore del testo;
-  SetConsoleTextAttribute(hCon,Color);
-}
 void boss(int vet[dim][dim],int dif)
 {
     int i,l,num,flag,k,spara;
