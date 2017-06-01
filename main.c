@@ -1,32 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#ifdef WIN32
-#include <windows.h>          // mi serve per la funzione di Sleep();
-#endif
-#ifdef __unix__
-#include <unistd.h>
-#endif // __unix__
-
-#include <conio.h>            // Mi serve per la funzione di getch e ptuch e kbhit(funzione che realizza condizione se premo un tasto)
-#include <time.h>            // srand( time( NULL ) );  num=1 +rand()%n  per numeri casuali
-
-
-
-
-
-#define dim 18
-
-void sleep_mil(unsigned int ms)
-{
-    #if defined(WIN32)
-      Sleep(ms);
-    #elif defined(__unix__)
-      usleep(1000*ms);
-    #else
-      printf("Unsupported operating system!");
-    #endif
-
-}
 
 void clear_screen ( void )
 {
