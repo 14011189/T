@@ -1,201 +1,190 @@
 
 
-void ia_boss2(int vet[dim][dim],int dif)
+void boss(int vet[dim][dim],int dif)
 {
-    int i,l,num,flag,k,spara;
+	int i,l,num,flag,k,spara;
 
-    srand(time(NULL));
+	srand(time(NULL));
 
-    for(i=0;i<dim;i++){
-        for(l=0;l<dim;l++){
-            if(vet[i][l]==14)
-            {
-                if((vet[i-1][l]==5&&vet[i][l-1]==0)||(vet[i-1][l]==15&&vet[i][l-1]==0))
-                {
-                    vet[i][l]=0;
-                    vet[i][l-1]=6;
-                                               // questi due if servono perchè la navicella eviti un proiettile del compagno, se è possibile
+	for(i=0;i<dim;i++)
+	{
+		for(l=0;l<dim;l++)
+		{
+			if(vet[i][l]==10)
+			{
+				num=1+rand()%dif;
 
-                }else if((vet[i-1][l]==5&&vet[i][l+1]==0)||(vet[i-1][l]==15&&vet[i][l+1]==0))
-                {
-                    vet[i][l]=0;
-                    vet[i][l+1]=6;
-                                              // questi due if servono perchè la navicella eviti un proiettile del compagno, se è possibile
+				if(vet[i+1][l]==1&&l!=1&&num<dif)
+				{
+					vet[i][l]=0;
+					vet[i][l-1]=6;
+				}
+				// 랜덤으로 지정된 숫자가 10보다 적으면 사용자의 총알을 피함
+				else if(vet[i+1][l]==1&&l!=dim-2&&num<dif)       
+				{
+					vet[i][l]=0;
+					vet[i][l+1]=6;
 
+				}
 
-                }else{
-                num=1+rand()%dif;
-                if(vet[i+1][l]==1&&l!=1&&num<dif&&vet[i][l-1]==0)
-                {
-                    vet[i][l]=0;
-                    vet[i][l-1]=6;
-                }else if(vet[i+1][l]==1&&l!=dim-2&&num<dif&&vet[i][l+1]==0)        // evita i proiettili del giocatore se un numero casuale e' minore di 10
-                {
-                    vet[i][l]=0;
-                    vet[i][l+1]=6;
+				else{
 
-                }
+					// 행동 조건을 만드는 수를 랜덤으로 지정
+					num=1+rand()%dif;                           
 
-                else{
+					// 행동 1: 왼쪽 이동 또는 총알 발사 불가
+					if(num==1)
+					{
+						if(vet[i][l-1]==0&&l!=1)
+						{              
+							vet[i][l]=0;
+							vet[i][l-1]=6;
+						}
+						else
+						{
+							flag=0;
+							for(k=i+1;k<dim;k++)
+							{
+								if(vet[k][l]==3||vet[k][l]==6)
+								{ //프론트 메이트가 1번 리턴 하는 경우, 자유 낙하 궤적이 있는지 확인
+									flag=1;
+								}
+							}
+							if(flag==0)
+							{
+								// 1에서 10사이의 숫자를 생성, 샷이 실패할 수 있으며 그 경우에는 발사되지 않음
+								spara=1+rand()%10;            
+								if(spara%2==0)
+								{
+									vet[i+1][l]=5;
+									vet[i][l]=6;
+								}
+								else
+								{
+									if(vet[i+2][l]==0)
+									{
+										vet[i+1][l]=8;
+									}
+									vet[i][l]=6;
+								}
+							}
+						}
 
-                num=1+rand()%dif;                           //genero un numero random che provoca diversi comportamneti
-
-
-                if(num==1){
-                    if(vet[i][l-1]==0&&l!=1){              // comportmaneto 1: va a sinistra oppure se non può spara
-                        vet[i][l]=0;
-                        vet[i][l-1]=6;
-                    }else{
-                        flag=0;
-                    for(k=i+1;k<dim;k++){
-                        if(vet[k][l]==14||vet[k][l]==6){    //controlla se ha la traiettoria di tiro libera, se ha un compagno davanti restituisce 1
-                            flag=1;
-                        }
-                    }
-                    if(flag==0){
-                            spara=1+rand()%10;            // genera un numero fra 1 e 10 , se è pari lo sparo va a buon fine, altrimenti non spara
-                    if(spara%2==0){
-                        if(vet[i+2][l]==0){
-                          vet[i+1][l]=5;
-                        }
-                        vet[i][l]=6;
-                    }else{
-                        if(vet[i+2][l]==0){
-                          vet[i+1][l]=15;
-                        }
-                        vet[i][l]=6;
-                    }
-                    }
-                    }
-
-                }
-                if(num==2){                            // comportamento 2: va su, e se non può spara
-                    if(vet[i-1][l]==0&&i!=1){
-                        vet[i][l]=0;
-                        vet[i-1][l]=6;
-                    }else{
-                        flag=0;
-                    for(k=i+1;k<dim;k++){
-                        if(vet[k][l]==14||vet[k][l]==6){
-                            flag=1;
-                        }
-                    }
-                    if(flag==0){
-                            spara=1+rand()%10;
-                    if(spara%2==0){
-                        if(vet[i+2][l]==0){
-                          vet[i+1][l]=5;
-                        }
-                        vet[i][l]=6;
-                    }else{
-                        if(vet[i+2][l]==0){
-                          vet[i+1][l]=15;
-                        }
-                        vet[i][l]=6;
-                    }
-                    }
-                    }
-
-
-                }
-                if(num==3){
-                    if(vet[i][l+1]==0&&l!=dim-2){         // comportamento 3: va a destra, e se non può spara
-                        vet[i][l]=0;
-                        vet[i][l+1]=6;
-                    }else{
-                        flag=0;
-                    for(k=i+1;k<dim;k++){
-                        if(vet[k][l]==14||vet[k][l]==6){
-                            flag=1;
-                        }
-                    }
-                    if(flag==0){
-                            spara=1+rand()%10;
-                    if(spara%2==0){
-                        if(vet[i+2][l]==0){
-                          vet[i+1][l]=5;
-                        }
-                        vet[i][l]=6;
-                    }else{
-                        if(vet[i+2][l]==0){
-                          vet[i+1][l]=15;
-                        }
-                        vet[i][l]=6;
-                    }
-                    }
-                    }
+					}
+					if(num==2){                            // 행동 2: 발사되지 않은 경우, 계속해서 진행
+						if(vet[i-1][l]==0&&i!=1){
+							vet[i][l]=0;
+							vet[i-1][l]=6;
+						}else{
+							flag=0;
+							for(k=i+1;k<dim;k++){
+								if(vet[k][l]==3||vet[k][l]==6){
+									flag=1;
+								}
+							}
+							if(flag==0){
+								spara=1+rand()%10;
+								if(spara%2==0){
+									vet[i+1][l]=5;
+									vet[i][l]=6;
+								}else{
+									if(vet[i+2][l]==0){
+										vet[i+1][l]=8;
+									}
+									vet[i][l]=6;
+								}
+							}
+						}
 
 
-                }
-                if(num==4){
-                    if(vet[i+1][l]==0&&i!=(dim/2)-2){
-                        vet[i][l]=0;
-                        vet[i+1][l]=6;                // comportamento 4: va giu, e se non può spara
-                    }else{
-                        flag=0;
-                    for(k=i+1;k<dim;k++){
-                        if(vet[k][l]==14||vet[k][l]==6){
-                            flag=1;
-                        }
-                    }
-                    if(flag==0){
-                            spara=1+rand()%10;
-                    if(spara%2==0){
-                        if(vet[i+2][l]==0){
-                          vet[i+1][l]=5;
-                        }
-                        vet[i][l]=6;
-                    }else{
-                        if(vet[i+2][l]==0){
-                          vet[i+1][l]=15;
-                        }
-                        vet[i][l]=6;
-                    }
-                    }
-                    }
+					}
+					if(num==3){
+						if(vet[i][l+1]==0&&l!=dim-2){         // 행동 3: 발사되지 않을 경우, 오른쪽으로 이동
+							vet[i][l]=0;
+							vet[i][l+1]=6;
+						}else{
+							flag=0;
+							for(k=i+1;k<dim;k++){
+								if(vet[k][l]==3||vet[k][l]==6){
+									flag=1;
+								}
+							}
+							if(flag==0){
+								spara=1+rand()%10;
+								if(spara%2==0){
+									vet[i+1][l]=5;
+									vet[i][l]=6;
+								}else{
+									if(vet[i+2][l]==0){
+										vet[i+1][l]=8;
+									}
+									vet[i][l]=6;
+								}
+							}
+						}
+					}
+					// 행동 4: 발사되지 않은 경우, 아래로 이동
+					if(num==4){
+						if(vet[i+1][l]==0&&i!=(dim/2)-2){
+							vet[i][l]=0;
+							vet[i+1][l]=6;                
+						}else{
+							flag=0;
+							for(k=i+1;k<dim;k++){
+								if(vet[k][l]==3||vet[k][l]==6){
+									flag=1;
+								}
+							}
+							if(flag==0){
+								spara=1+rand()%10;
+								if(spara%2==0){
+									vet[i+1][l]=5;
+									vet[i][l]=6;
+								}else{
+									if(vet[i+2][l]==0){
+										vet[i+1][l]=8;
+									}
+									vet[i][l]=6;
+								}
+							}
+						}
 
-                }
-                if(num==5){
-                    flag=0;
-                    for(k=i+1;k<dim;k++){
-                        if(vet[k][l]==14||vet[k][l]==6){    // comportamento 5: spara, ovviamente evitando se davanti a se ha un alleato
-                            flag=1;
-                        }
-                    }
-                    if(flag==0){
-                            spara=1+rand()%10;
-                    if(spara%2==0){
-                        if(vet[i+2][l]==0){
-                          vet[i+1][l]=5;
-                        }
-                        vet[i][l]=6;
-                    }else{
-                        if(vet[i+2][l]==0){
-                          vet[i+1][l]=15;
-                        }
-                        vet[i][l]=6;
-                    }
-                    }
-                }
-                }
+					}
+					if(num==5){
+						flag=0;
+						for(k=i+1;k<dim;k++){
+							if(vet[k][l]==3||vet[k][l]==6){    // 행동 5; 발사, 앞에 적이 있을 경우 피할 수 있음
+								flag=1;
+							}
+						}
+						if(flag==0){
+							spara=1+rand()%10;
+							if(spara%2==0){
+								vet[i+1][l]=5;
+								vet[i][l]=6;
+							}else{
+								if(vet[i+2][l]==0){
+									vet[i+1][l]=8;
+								}
+								vet[i][l]=6;
+							}
+						}
+					}
+				}
 
-                }
-            }
+			}
 
 
-        }
-    }
-    for(i=0;i<dim;i++){
-        for(l=0;l<dim;l++){
-            if(vet[i][l]==6){
-                vet[i][l]=14;
-            }
-        }
-    }
-
-
+		}
+	}
+	for(i=0;i<dim;i++){
+		for(l=0;l<dim;l++){
+			if(vet[i][l]==6){
+				vet[i][l]=10;
+			}
+		}
+	}
 }
-
 void intelligenza_artificiale(int vet[dim][dim],int dif)         // Funzione che gestisce le mosse del computer per ogni navicella avversaria
 {
     int i,l,num,flag,k,spara;
